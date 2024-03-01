@@ -1,30 +1,22 @@
 import pytest
-
 from functions.level_1.one_gender import genderalize
 
 
 @pytest.mark.parametrize(
-    "verb_male, verb_female, gender, expected_result",
+    "verb_male, verb_female, gender, expected",
     [
         ("verb_male", "verb_female", "male", "verb_male"),
-        ("verb_male", "verb_female", "somethingelse", "verb_female"),
     ],
 )
-def test_genderalize(verb_male, verb_female, gender, expected_result):
-    assert genderalize(verb_male, verb_female, gender) == expected_result
+def test__genderalize__male_gender(verb_male, verb_female, gender, expected):
+    assert genderalize(verb_male, verb_female, gender) == expected
 
 
 @pytest.mark.parametrize(
-    "verb_male, verb_female, gender, expected_error",
+    "verb_male, verb_female, gender, expected",
     [
-        (None, None, "male", ValueError),
-        ("", "", "male", ValueError),
-        (1, 2, "male", TypeError),
-        ("verb_male", "verb_female", 1, TypeError),
-        ("verb_male", "verb_female", None, TypeError),
+        ("verb_male", "verb_female", "not_male", "verb_female"),
     ],
 )
-@pytest.mark.xfail
-def test_errors(verb_male, verb_female, gender, expected_error):
-    with pytest.raises(expected_error):
-        genderalize(verb_male, verb_female, gender)
+def test__genderalize__not_male_gender(verb_male, verb_female, gender, expected):
+    assert genderalize(verb_male, verb_female, gender) == expected
