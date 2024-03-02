@@ -21,4 +21,5 @@ def change_copy_item(title: str, max_main_item_title_length: int = 100) -> str:
         else f"{title} (2)"
     )
 
+
 print(change_copy_item("Harry Potter", 100))

@@ -7,7 +7,6 @@ def solve_square_equation(
     const_coefficient: float,
 ) -> tuple[float | None, float | None]:
     discriminant = linear_coefficient**2 - 4 * square_coefficient * const_coefficient
-
     if discriminant < 0:
         return None, None
 
