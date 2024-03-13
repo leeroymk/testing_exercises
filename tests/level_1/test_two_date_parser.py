@@ -1,40 +1,37 @@
-import datetime
-
 import pytest
+
 from functions.level_1.two_date_parser import compose_datetime_from
 
 
-@pytest.fixture
-def today():
-    return datetime.date.today()
+@pytest.mark.parametrize("time_str", ["12:00", "00:00", "23:59"])
+def test__compose_datetime_from__today_different_time_returns_today(time_str, today):
+    assert compose_datetime_from("today", time_str).date() == today
 
 
-@pytest.fixture
-def tomorrow():
-    return datetime.date.today() + datetime.timedelta(days=1)
+@pytest.mark.parametrize("date_str", ["someday", "not-tomorrow"])
+def test__compose_datetime_from__not_tomorrow_day_returns_today(date_str, today):
+    assert compose_datetime_from(date_str, "12:00").date() == today
 
 
-@pytest.mark.parametrize("date_str, time_str", [("today", "12:00"), ("today", "00:00")])
-def test__compose_datetime_from__today(date_str, time_str, today):
-    expected_datetime = datetime.datetime(
-        today.year,
-        today.month,
-        today.day,
-        int(time_str.split(":")[0]),
-        int(time_str.split(":")[1]),
-    )
-    assert compose_datetime_from(date_str, time_str) == expected_datetime
+@pytest.mark.parametrize("time_str", ["12:00", "00:00", "23:59"])
+def test__compose_datetime_from__any_time_tomorrow_returns_tomorrow(time_str, tomorrow):
+    assert compose_datetime_from("tomorrow", time_str).date() == tomorrow
 
 
 @pytest.mark.parametrize(
-    "date_str, time_str", [("tomorrow", "12:00"), ("tomorrow", "00:00")]
+    "time_str, expected", [("12:00", 12), ("00:00", 0), ("23:59", 23)]
 )
-def test__compose_datetime_from__tomorrow(date_str, time_str, tomorrow):
-    expected_datetime = datetime.datetime(
-        tomorrow.year,
-        tomorrow.month,
-        tomorrow.day,
-        int(time_str.split(":")[0]),
-        int(time_str.split(":")[1]),
-    )
-    assert compose_datetime_from(date_str, time_str) == expected_datetime
+def test__compose_datetime_from__hour_parsing_valid(time_str, expected):
+    assert compose_datetime_from("tomorrow", time_str).hour == expected
+
+
+@pytest.mark.parametrize(
+    "time_str, expected",
+    [
+        ("12:00", 0),
+        ("00:31", 31),
+        ("23:59", 59),
+    ],
+)
+def test__compose_datetime_from__minutes_parsing_valid(time_str, expected):
+    assert compose_datetime_from("today", time_str).minute == expected

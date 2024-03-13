@@ -28,28 +28,30 @@ def test__change_copy_item__increase_copy_number(title, expected):
 
 
 @pytest.mark.parametrize(
-    "title, max_main_item_title_length, expected",
+    "title",
     [
-        ("Harry Potter", 10, "Harry Potter"),
-        ("Lord of the Rings", 10, "Lord of the Rings"),
-        ("Star Wars(2)", 10, "Star Wars(2)"),
+        ("Harry Potter"),
+        ("Lord of the Rings"),
+        ("Star Wars(2)"),
     ],
 )
-def test__change_copy_item__max_main_item_title_length_less_than_title_length(
-    title, max_main_item_title_length, expected
+def test__change_copy_item__max_main_item_title_length_less_than_title_length_title_no_change(
+    title,
 ):
-    assert change_copy_item(title, max_main_item_title_length) == expected
+    assert change_copy_item(title, max_main_item_title_length=10) == title
 
 
 @pytest.mark.parametrize(
-    "title, max_main_item_title_length, expected",
+    "title, expected",
     [
-        ("Harry Potter", 50, "Copy of Harry Potter"),
-        ("Lord of the Rings", 50, "Copy of Lord of the Rings"),
-        ("Star Wars(2)", 50, "Copy of Star Wars(2)"),
+        ("Harry Potter", "Copy of Harry Potter"),
+        ("Lord of the Rings", "Copy of Lord of the Rings"),
+        ("Star Wars(2)", "Copy of Star Wars(2)"),
     ],
 )
-def test__change_copy_item__max_main_item_title_length_more_than_title_length(
-    title, max_main_item_title_length, expected
+def test__change_copy_item__max_main_item_title_length_more_than_title_length_title_changed(
+    title,
+    expected,
+    max_main_item_title_length=50,
 ):
     assert change_copy_item(title, max_main_item_title_length) == expected
