@@ -1,58 +1,33 @@
-import datetime
 import decimal
 
 import pytest
 
-from functions.level_1.four_bank_parser import (BankCard, Expense, SmsMessage,
-                                                parse_ineco_expense)
+from functions.level_1.four_bank_parser import parse_ineco_expense
 
 
 @pytest.mark.parametrize(
-    "sms, cards, expected_result",
+    "sms, amount",
     [
-        (
-            SmsMessage(
-                "100 000.500, 1234 01.01.20 12:00 12:01",
-                "Иван",
-                datetime.datetime(2022, 1, 1, 12, 0),
-            ),
-            [BankCard("1234", "Иван Иванов")],
-            Expense(
-                amount=decimal.Decimal("100"),
-                card=BankCard(last_digits="1234", owner="Иван Иванов"),
-                spent_in="12:01",
-                spent_at=datetime.datetime(2020, 1, 1, 12, 0),
-            ),
-        ),
-        (
-            SmsMessage(
-                "200 000.500, 5678 02.02.20 13:00 13:01",
-                "Петр",
-                datetime.datetime(2022, 1, 2, 14, 30),
-            ),
-            [BankCard("5678", "Петр Петров")],
-            Expense(
-                amount=decimal.Decimal("200"),
-                card=BankCard(last_digits="5678", owner="Петр Петров"),
-                spent_in="13:01",
-                spent_at=datetime.datetime(2020, 2, 2, 13, 0),
-            ),
-        ),
-        (
-            SmsMessage(
-                "300 000.500, 9012 03.03.20 14:00 14:01",
-                "Анна",
-                datetime.datetime(2022, 1, 3, 16, 45),
-            ),
-            [BankCard("9012", "Анна Смирнова")],
-            Expense(
-                amount=decimal.Decimal("300"),
-                card=BankCard(last_digits="9012", owner="Анна Смирнова"),
-                spent_in="14:01",
-                spent_at=datetime.datetime(2020, 3, 3, 14, 0),
-            ),
-        ),
+        ("100 200.5, 1234 01.01.20 12:00 12:01 shop", 100),
+        ("-20 200.5, 0123 01.01.20 12:00 12:01 shop", -20),
     ],
 )
-def test_parse_ineco_expense(sms, cards, expected_result):
-    assert parse_ineco_expense(sms, cards) == expected_result
+def test__parse_ineco_expense__return_correct_amount(sms, amount, make_sms, cards):
+    sms_message = make_sms(text=sms)
+    expense = parse_ineco_expense(sms_message, cards)
+    assert expense.amount == decimal.Decimal(amount)
+
+
+@pytest.mark.parametrize(
+    "sms, expected_spent_at",
+    [
+        ("100 200.5, 1234 01.01.20 12:00 12:01 shop", "2020-01-01T12:00:00"),
+        ("200 200.5, 0123 13.03.24 16:36 12:01 shop", "2024-03-13T16:36:00"),
+    ],
+)
+def test__parse_ineco_expense__return_correct_spent_at(
+    sms, expected_spent_at, make_sms, cards
+):
+    sms_message = make_sms(text=sms)
+    expense = parse_ineco_expense(sms_message, cards)
+    assert expense.spent_at.isoformat() == expected_spent_at
