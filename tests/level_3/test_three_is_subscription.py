@@ -3,47 +3,47 @@ import datetime
 from functions.level_3.three_is_subscription import is_subscription
 
 
-def test__is_subscription__three_plus_purchases_in_one_location_and_not_more_than_once_in_month_is_subscription(
+def test__is_subscription__is_subscription_3_plus_purchases_in_1_place_at_most_once_a_month(
     make_expense,
 ):
-    expense_1 = make_expense(
+    first_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 3, 1),
     )
-    expense_2 = make_expense(
+    second_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 4, 1),
     )
-    expense_3 = make_expense(
+    third_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 5, 1),
     )
 
-    assert is_subscription(expense_1, [expense_1, expense_2, expense_3]) is True
+    assert is_subscription(first_expense, [first_expense, second_expense, third_expense]) is True
 
 
-def test__is_subscription__three_plus_purchases_in_one_location_and_more_than_once_in_month_is_not_subscription(
+def test__is_subscription__is_not_subscription_3_plus_purchases_in_1_place_at_most_once_a_month(
     make_expense,
 ):
-    expense_1 = make_expense(
+    first_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 3, 1),
     )
-    expense_2 = make_expense(
+    second_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 3, 2),
     )
-    expense_3 = make_expense(
+    third_expense = make_expense(
         spent_in="chinar",
         spent_at=datetime.datetime(2024, 4, 1),
     )
 
-    assert is_subscription(expense_1, [expense_1, expense_2, expense_3]) is False
+    assert is_subscription(first_expense, [first_expense, second_expense, third_expense]) is False
 
 
-def test__is_subscription__less_than_three_purchases_in_one_location_is_not_subscription(
+def test__is_subscription__is_not_subscription_less_than_3_purchases_in_1_place(
     make_expense,
 ):
-    expense_1 = make_expense(spent_in="chinar")
-    expense_2 = make_expense(spent_in="chinar")
-    assert is_subscription(expense_1, [expense_1, expense_2]) is False
+    first_expense = make_expense(spent_in="chinar")
+    second_expense = make_expense(spent_in="chinar")
+    assert is_subscription(first_expense, [first_expense, second_expense]) is False

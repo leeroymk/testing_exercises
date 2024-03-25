@@ -10,7 +10,7 @@ def test__find_fraud_expenses__no_fraud_empty_history():
 
 
 @pytest.mark.parametrize("amount", [3000, 5000])
-def test__find_fraud_expenses__fraud_found_over_3_payments_less_or_equal_5000_in_one_time(
+def test__find_fraud_expenses__fraud_found_over_3_payments_less_or_equal_5000_at_one_time(
     make_expense, amount
 ):
     expenses = [
@@ -34,7 +34,7 @@ def test__find_fraud_expenses__fraud_found_over_3_payments_less_or_equal_5000_in
     assert find_fraud_expenses(expenses) == expenses
 
 
-def test__find_fraud_expenses__no_fraud_found_over_3_payments_over_5000_in_one_time(
+def test__find_fraud_expenses__no_fraud_found_over_3_payments_over_5000_at_one_time(
     make_expense,
 ):
     expenses = [
@@ -58,7 +58,7 @@ def test__find_fraud_expenses__no_fraud_found_over_3_payments_over_5000_in_one_t
     assert find_fraud_expenses(expenses) == []
 
 
-def test__find_fraud_expenses__no_fraud_found_2_equal_purchases_below_max_amount_in_one_day(
+def test__find_fraud_expenses__no_fraud_found_2_equal_purchases_below_max_amount_at_one_day(
     make_expense,
 ):
     expenses = [
@@ -75,7 +75,7 @@ def test__find_fraud_expenses__no_fraud_found_2_equal_purchases_below_max_amount
     assert find_fraud_expenses(expenses) == []
 
 
-def test__find_fraud_expenses__no_fraud_found_3_purchases_below_max_amount_in_different_days(
+def test__find_fraud_expenses__no_fraud_found_3_purchases_below_max_amount_at_different_days(
     make_expense,
 ):
     expenses = [
