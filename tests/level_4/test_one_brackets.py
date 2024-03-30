@@ -24,7 +24,6 @@ def test__delete_remove_brackets_quotes__raises_exception_if_name_is_empty():
         delete_remove_brackets_quotes("")
 
 
-@pytest.mark.parametrize(
-    "name", ["{}", "{ }", "{  }"])
+@pytest.mark.parametrize("name", ["{}", "{ }", "{  }"])
 def test_delete_remove_brackets_quotes__return_empty_string_if_name_is_empty(name):
     assert delete_remove_brackets_quotes(name) == ""
