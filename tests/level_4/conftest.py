@@ -32,13 +32,3 @@ def make_student(faker):
         )
 
     return inner
-
-
-# @pytest.fixture
-# def students():
-#     return [
-#         make_student(telegram_account="alfa"),
-#         make_student(telegram_account="beta"),
-#         make_student(telegram_account="gamma"),
-#         make_student(telegram_account=None),
-#     ]
