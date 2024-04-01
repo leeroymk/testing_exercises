@@ -29,9 +29,7 @@ def test__solve_square_equation__discriminant_lt_zero_return_no_roots(a, b, c):
         (2.5, 1.0, (-0.4, None)),
     ],
 )
-def test__solve_square_equation__square_coef_zero_linear_coef_not_zero_return_one_root(
-    b, c, root
-):
+def test__solve_square_equation__square_coef_zero_linear_coef_not_zero_return_one_root(b, c, root):
     assert solve_square_equation(0.0, b, c) == root
 
 
