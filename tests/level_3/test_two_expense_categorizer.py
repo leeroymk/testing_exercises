@@ -4,13 +4,8 @@ from functions.level_3.models import ExpenseCategory
 from functions.level_3.two_expense_categorizer import guess_expense_category
 
 
-def test__guess_expense_category__return_none_if_no_spent_in(
-    make_expense,
-):
-    expense = make_expense(
-        category=None,
-        spent_in="wildberries",
-    )
+def test__guess_expense_category__return_none_if_no_spent_in(make_expense):
+    expense = make_expense(category=None, spent_in="wildberries")
     assert guess_expense_category(expense) is None
 
 
