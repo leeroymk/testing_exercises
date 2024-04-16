@@ -1,14 +1,11 @@
+import os
 import typing as t
 
-from faker import Faker
 import pytest
 
 from functions.level_4.two_students import Student
 
-
 NOT_SET: t.Any = "____"
-
-faker = Faker()
 
 
 @pytest.fixture
@@ -32,3 +29,29 @@ def make_student(faker):
         )
 
     return inner
+
+
+@pytest.fixture
+def create_file():
+    def inner(filepath, lines, comments):
+        with open(filepath, "w") as file:
+            for _ in range(lines):
+                file.write(f"line {_}\n")
+            for _ in range(comments):
+                file.write(f"# comment {_}\n")
+
+    return inner
+
+
+@pytest.fixture
+def create_config():
+    def inner(filepath, content):
+        with open(filepath, "w") as file:
+            file.write("[tool:app-config]\n")
+            file.write(content)
+
+    return inner
+
+
+def remove_temp_file(filepath):
+    os.remove(filepath)

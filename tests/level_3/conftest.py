@@ -3,13 +3,10 @@ import decimal
 import typing as t
 
 import pytest
-from faker import Faker
 
 from functions.level_3.models import BankCard, Expense, ExpenseCategory
 
 NOT_SET: t.Any = "____"
-
-faker = Faker()
 
 
 @pytest.fixture
@@ -36,9 +33,7 @@ def make_expense(faker):
         spent_in = faker.company() if spent_in is NOT_SET else spent_in
         spent_at = faker.date_time_this_year() if spent_at is NOT_SET else spent_at
         category = (
-            faker.random_element(elements=ExpenseCategory)
-            if category is NOT_SET
-            else category
+            faker.random_element(elements=ExpenseCategory) if category is NOT_SET else category
         )
 
         return Expense(
