@@ -24,9 +24,7 @@ def test__check_tweet_sentiment__bad_and_good_words_are_equal_return_None(
         "You're not good enough",
     ],
 )
-def test__check_tweet_sentiment__more_good_words_return_GOOD(
-    text, good_words, bad_words
-):
+def test__check_tweet_sentiment__more_good_words_return_GOOD(text, good_words, bad_words):
     assert check_tweet_sentiment(text, good_words, bad_words) == "GOOD"
 
 
