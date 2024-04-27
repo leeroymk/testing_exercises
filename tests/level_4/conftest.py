@@ -17,11 +17,7 @@ def make_student(faker):
     ):
         first_name = faker.first_name() if first_name == NOT_SET else first_name
         last_name = faker.last_name() if last_name == NOT_SET else last_name
-        telegram_account = (
-            "@" + faker.simple_profile()["username"]
-            if telegram_account == NOT_SET
-            else telegram_account
-        )
+        telegram_account = "@" + faker.pystr() if telegram_account is NOT_SET else telegram_account
         return Student(
             first_name=first_name,
             last_name=last_name,
@@ -32,15 +28,21 @@ def make_student(faker):
 
 
 @pytest.fixture
-def create_file():
+def make_file():
+    filepath_var = None
+
     def inner(filepath, lines, comments):
+        nonlocal filepath_var
+        filepath_var = filepath
         with open(filepath, "w") as file:
             for _ in range(lines):
                 file.write(f"line {_}\n")
             for _ in range(comments):
                 file.write(f"# comment {_}\n")
 
-    return inner
+    yield inner
+
+    os.remove(filepath_var)
 
 
 @pytest.fixture
@@ -50,8 +52,4 @@ def create_config():
             file.write("[tool:app-config]\n")
             file.write(content)
 
-    return inner
-
-
-def remove_temp_file(filepath):
-    os.remove(filepath)
+    yield inner
